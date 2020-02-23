@@ -72,7 +72,6 @@ if __name__ =="__main__":
     dataset = load_data(dataset_dir)
 
     for image, mask in dataset:
-        model.fit(image)
         print("image {}, mask {}".format(image.shape, mask.shape))
 
 

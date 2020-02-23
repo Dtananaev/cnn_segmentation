@@ -62,10 +62,10 @@ def load_data(dataset_dir):
 
     ds = tf.data.Dataset.from_tensor_slices((all_images_pathes, all_masks_pathes))
     ds = ds.map(load_image_mask, num_parallel_calls=2)
-    ds = ds.shuffle(buffer_size=SHUFFLE_BUFFER) 
-    ds = ds.repeat()
-    ds = ds.batch(BATCH_SIZE)
-    ds = ds.prefetch(buffer_size=SHUFFLE_BUFFER)
+    ds = ds.shuffle(buffer_size=SHUFFLE_BUFFER) # перемешивает картинки в случайном порядке (SHUFFLE_BUFFER -количество перемешиваемых картинок за раз)
+    ds = ds.repeat() # как только все картинки пройдут через нейронку, начнет повторно их посылать
+    ds = ds.batch(BATCH_SIZE) # размер батча (количество картинок которые загружаются в нейронку за раз)
+    ds = ds.prefetch(buffer_size=2) # подгружает в память 2 картинки что бы тренировка шла быстрее
     return ds
 
 if __name__ =="__main__":

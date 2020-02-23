@@ -13,7 +13,7 @@ dataset_dir="./data/stage1_train"
 IMG_WIDTH = 128
 IMG_HEIGHT = 128
 IMG_CHANNELS = 1
-BATCH_SIZE = 10
+BATCH_SIZE = 4
 SHUFFLE_BUFFER = 8
 
 
@@ -45,6 +45,7 @@ def process_image(image_path, resize=True, data_type=tf.float32):
 
 def load_image_mask(image_path, mask_path):
     image = process_image(image_path, data_type=tf.float32)
+    image = image/ 255.0 # Нормализуем картинку до значений между 0 и 1
     mask = process_image(image_path, data_type=tf.bool)
     return image, mask 
 
@@ -71,6 +72,7 @@ if __name__ =="__main__":
     dataset = load_data(dataset_dir)
 
     for image, mask in dataset:
+        model.fit(image)
         print("image {}, mask {}".format(image.shape, mask.shape))
 
 

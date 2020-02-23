@@ -13,7 +13,7 @@ dataset_dir="./data/stage1_train"
 IMG_WIDTH = 128
 IMG_HEIGHT = 128
 IMG_CHANNELS = 1
-BATCH_SIZE = 4
+BATCH_SIZE = 10
 SHUFFLE_BUFFER = 8
 
 
@@ -59,13 +59,20 @@ def load_data(dataset_dir):
     all_images_pathes = sorted(glob.glob(dataset_dir + "/*/images/*.png"))
     all_masks_pathes = sorted(glob.glob(dataset_dir + "/*/combined_mask/*.png"))
 
-    ds = tf.data.Dataset.from_tensor_slices((all_images_pathes, all_masks_pathes))    
+    ds = tf.data.Dataset.from_tensor_slices((all_images_pathes, all_masks_pathes))
     ds = ds.map(load_image_mask, num_parallel_calls=2)
     ds = ds.shuffle(buffer_size=SHUFFLE_BUFFER) 
     ds = ds.repeat()
     ds = ds.batch(BATCH_SIZE)
     ds = ds.prefetch(buffer_size=SHUFFLE_BUFFER)
     return ds
+
+if __name__ =="__main__":
+    dataset = load_data(dataset_dir)
+
+    for image, mask in dataset:
+        print("image {}, mask {}".format(image.shape, mask.shape))
+
 
 
 

@@ -12,7 +12,6 @@ import imageio
 from tqdm import tqdm
 import cv2
 
-input_dir="./data/stage1_train"
 
 
 def load_image(image_path):

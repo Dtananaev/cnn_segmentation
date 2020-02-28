@@ -46,7 +46,8 @@ def process_image(image_path, resize=True, data_type=tf.float32):
 def load_image_mask(image_path, mask_path):
     image = process_image(image_path, data_type=tf.float32)
     image = image/ 255.0 # Нормализуем картинку до значений между 0 и 1
-    mask = process_image(image_path, data_type=tf.bool)
+    mask = process_image(mask_path, data_type=tf.bool)
+    mask = tf.cast(mask, tf.float32)
     return image, mask 
 
 
@@ -59,14 +60,14 @@ def load_data(dataset_dir):
     # Делаем список всех папок внутри папки dataset_dir
     all_images_pathes = sorted(glob.glob(dataset_dir + "/*/images/*.png"))
     all_masks_pathes = sorted(glob.glob(dataset_dir + "/*/combined_mask/*.png"))
+    dataset_size = int(len(all_images_pathes) / BATCH_SIZE)
 
     ds = tf.data.Dataset.from_tensor_slices((all_images_pathes, all_masks_pathes))
     ds = ds.map(load_image_mask, num_parallel_calls=2)
     ds = ds.shuffle(buffer_size=SHUFFLE_BUFFER) # перемешивает картинки в случайном порядке (SHUFFLE_BUFFER -количество перемешиваемых картинок за раз)
-    ds = ds.repeat() # как только все картинки пройдут через нейронку, начнет повторно их посылать
     ds = ds.batch(BATCH_SIZE) # размер батча (количество картинок которые загружаются в нейронку за раз)
     ds = ds.prefetch(buffer_size=2) # подгружает в память 2 картинки что бы тренировка шла быстрее
-    return ds
+    return ds, dataset_size
 
 if __name__ =="__main__":
     dataset = load_data(dataset_dir)

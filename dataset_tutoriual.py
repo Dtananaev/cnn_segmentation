@@ -70,7 +70,7 @@ def load_data(dataset_dir):
     return ds, dataset_size
 
 if __name__ =="__main__":
-    dataset = load_data(dataset_dir)
+    dataset, dataset_size = load_data(dataset_dir)
 
     for image, mask in dataset:
         print("image {}, mask {}".format(image.shape, mask.shape))

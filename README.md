@@ -15,5 +15,5 @@ python train.py
 ```
 4. Inference:
 ```
-python inference.py --mode_dir=checkpoints/model-<number>
+python inference.py --model_dir=checkpoints/model-<number>
 ```
